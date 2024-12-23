@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardextend.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboarddropdown.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -20,7 +21,14 @@
                 <a href="/">Home</a>
                 <a href="/recommendation">Recommended</a>
                 <a href="/about">About</a>
-                <a href="/">{{ user.username }}</a>
+                <div class="user-menu">
+                    <a href="#" class="user-name">{{ user.username }}</a>
+                    <div class="dropdown">
+                        <a href="/profile">Profile</a>
+                        <a href="/history">History</a>
+                        <a href="/login/logout">Logout</a>
+                    </div>
+                </div>
 
             </nav>
         </header>
@@ -99,6 +107,23 @@
                 }
             });
         });
+        $(document).ready(function () {
+        const $userName = $('#user-name');
+        const $userDropdown = $('#user-dropdown');
+
+        $userName.on('click', function (e) {
+            e.preventDefault();
+            $userDropdown.toggleClass('active');
+        });
+
+        // Hide dropdown when clicking outside
+        $(document).on('click', function (e) {
+            if (!$userName.is(e.target) && !$userDropdown.is(e.target) && $userDropdown.has(e.target).length === 0) {
+                $userDropdown.removeClass('active');
+            }
+        });
+    });
     </script>
+    
 </body>
 </html>
