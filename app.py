@@ -24,6 +24,7 @@ def create_app():
     from about import about_bp
     from privacy import privacy_bp
     from recommendation import recommendation_bp
+    from terms import terms_bp
     
     app.register_blueprint(login_bp, url_prefix='/login')
     app.register_blueprint(register_bp, url_prefix='/register')
@@ -31,6 +32,7 @@ def create_app():
     app.register_blueprint(about_bp, url_prefix='/about')
     app.register_blueprint(recommendation_bp, url_prefix='/recommendation')
     app.register_blueprint(privacy_bp, url_prefix='/privacy')
+    app.register_blueprint(terms_bp, url_prefix='/terms')
 
     @app.route('/')
     def home():
