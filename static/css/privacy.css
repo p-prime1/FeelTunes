@@ -5,16 +5,9 @@ body, h1, h2, h3, p, ul, li, a {
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f9f9f9;
-    margin: 0;
-}
 
 /* Main Content */
-main.privacy-policy {
+body {
     font-family: sans-serif;
     margin: 0;
     padding: 0;
