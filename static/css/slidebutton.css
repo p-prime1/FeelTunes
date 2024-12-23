@@ -1,0 +1,34 @@
+.get-started-btn {
+    position: relative;
+    display: inline-block;
+    background-color: #0066cc;
+    color: white;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    overflow: hidden; /* Ensures sliding effect stays within the button */
+    z-index: 1; /* Keep text above background */
+    transition: color 0.3s ease-in-out; /* Smooth color transition */
+}
+
+.get-started-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%; /* Start outside the button */
+    width: 100%;
+    height: 100%;
+    background-color: #005bb5; /* Sliding background color */
+    z-index: -1; /* Place behind the button text */
+    transition: left 0.3s ease-in-out; /* Smooth slide effect */
+}
+
+.get-started-btn:hover::before {
+    left: 0; /* Slide the background into view */
+}
+
+.get-started-btn:hover {
+    color: white; /* Keep text color consistent during hover */
+}

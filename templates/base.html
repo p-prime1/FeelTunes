@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeelTune</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/loginextend.css') }}">
+</head>
+<body>
+
+    <!-- Header with navigation -->
+    <header>
+        <div class="header-left">
+            <a href="/"><img src="{{ url_for('static', filename='graphic/logo.png') }}" alt="FeelTune Logo" class="logo"></a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/recommendation">Recommended</a>
+            <a href="/about">About</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Block (Content will be injected here in child templates) -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+    </footer>
+
+</body>
+</html>
