@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FeelTune</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
+</head>
+<body>
+
+    <!-- Header with navigation -->
+    <header>
+        <div class="header-left">
+            <a href="/"><img src="{{ url_for('static', filename='graphic/logo.png') }}" alt="FeelTune Logo" class="logo"></a>
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/recommendation">Recommended</a>
+            <a href="/about">About</a>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <h2 class="welcome">Welcome to FeelTune</h2>
+        <p class="getstarted" id="typing-text">Your personalized music experience based on your mood!</p>
+        <a href="/register" class="get-started-btn">Get Started</a>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+    </footer>
+
+    <!-- JavaScript for Typing Effect -->
+    <script>
+        const typingText = document.getElementById("typing-text");
+        const text = "Your personalized music experience based on your mood!";
+        let index = 0;
+
+        function typeEffect() {
+            if (index < text.length) {
+                typingText.textContent += text.charAt(index);
+                index++;
+                setTimeout(typeEffect, 100); // Adjust speed of typing
+            }
+        }
+
+        // Clear text and start the effect
+        typingText.textContent = "";
+        typeEffect();
+    </script>
+</body>
+</html>

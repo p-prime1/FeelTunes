@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="about-page">
+    <section class="hero-section">
+        <h1>About FeelTune</h1>
+        <p class="tagline">Your personalized music journey, powered by your mood.</p>
+    </section>
+
+    <section class="about-details">
+        <div class="feature">
+            <h2>What is FeelTune?</h2>
+            <p>
+                FeelTune is a cutting-edge mood-based playlist generator that analyzes your emotions 
+                and curates the perfect soundtrack for your day. Using advanced integrations with 
+                music APIs like Spotify, we bring you playlists that resonate with how you feel.
+            </p>
+        </div>
+
+        <div class="feature">
+            <h2>Key Features</h2>
+            <ul>
+                <li>
+                    <strong>Mood Detection:</strong> 
+                    Input your mood (e.g., "happy," "relaxed") or analyze your feelings through text.
+                </li>
+                <li>
+                    <strong>Playlist Generation:</strong> 
+                    Instantly fetch mood-specific playlists or songs with direct links to play them.
+                </li>
+                <li>
+                    <strong>Personalized Recommendations:</strong> 
+                    Save your favorite playlists, explore suggestions based on your listening history, 
+                    and revisit your most loved tunes anytime.
+                </li>
+                <li>
+                    <strong>Interactive Interface:</strong> 
+                    Enjoy a clean and modern design with mood icons and an intuitive user experience.
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <h2>Ready to explore your musical mood?</h2>
+        <a href="/register" class="get-started-btn">Get Started Now</a>
+    </section>
+</main>
+{% endblock %}
