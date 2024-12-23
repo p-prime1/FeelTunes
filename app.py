@@ -22,12 +22,15 @@ def create_app():
     from register import register_bp
     from dashboard import dashboard_bp
     from about import about_bp
+    from privacy import privacy_bp
     from recommendation import recommendation_bp
+    
     app.register_blueprint(login_bp, url_prefix='/login')
     app.register_blueprint(register_bp, url_prefix='/register')
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
     app.register_blueprint(about_bp, url_prefix='/about')
     app.register_blueprint(recommendation_bp, url_prefix='/recommendation')
+    app.register_blueprint(privacy_bp, url_prefix='/privacy')
 
     @app.route('/')
     def home():
