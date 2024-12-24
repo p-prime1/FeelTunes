@@ -1,4 +1,4 @@
-.get-started-btn {
+.get-started-btn{
     position: relative;
     display: inline-block;
     background-color: #0066cc;
@@ -31,4 +31,31 @@
 
 .get-started-btn:hover {
     color: white; /* Keep text color consistent during hover */
+}
+
+.btn {
+    background-color: #007bff; /* Primary Blue */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    gap: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Darker Blue on Hover */
+}
+
+.btn:active {
+    background-color: #004085; /* Even Darker Blue on Active */
+    transform: scale(0.98); /* Slight Shrink on Click */
+}
+
+.btn:disabled {
+    background-color: #c0c0c0; /* Gray for Disabled */
+    cursor: not-allowed;
 }
