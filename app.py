@@ -48,11 +48,6 @@ def create_app():
     @app.context_processor
     def inject_user():
         return {'current_user': current_user}
-    
-    @app.route('/test')
-    def test():
-        return f"Logged in as: {current_user.username if current_user.is_authenticated else 'Not logged in'}"
-
         
     
     return app
