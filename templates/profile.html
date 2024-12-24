@@ -5,14 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flashed.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboarddropdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardextend.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
 </head>
 <body>
-    <header>
-        <a href="/dashboard">Back to Dashboard</a>
-    </header>
+        <!-- Header with navigation -->
+        <header>
+            <div class="header-left">
+                <a href="/"><img src="{{ url_for('static', filename='graphic/logo.png') }}" alt="FeelTune Logo" class="logo"></a>
+            </div>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/dashboard">Back to Dashboard</a>
+                <div class="user-menu">
+                    <a href="#" class="user-name">{{ user.username }}</a>
+                    <div class="dropdown">
+                        <a href="/history">History</a>
+                        <a href="/logout">Logout</a>
+                    </div>
+                </div>
+
+            </nav>
+        </header>
+
+    <!-- Flash Messages Section -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="flash-message {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <div class="profile-container">
         <h1>{{ user.username }}'s Profile</h1>
-        <p>Email: {{ user.email }}</p>
+        <h4>Email: {{ user.email }}</h4>
+        <h4>Username: {{ user.username }}</h4>
+        
+        <h2>Update Profile</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            
+            <!-- Email Field -->
+            <div>
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+                {% for error in form.email.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                {{ form.password.label }}
+                {{ form.password(class="form-control") }}
+                {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div>
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(class="form-control") }}
+                {% for error in form.confirm_password.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+
+            <!-- Update Button -->
+            <div>
+                {{ form.submit(class="btn") }}
+            </div>
+
+        </form>
     </div>
+    <footer>
+        <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+    </footer>
 </body>
 </html>
