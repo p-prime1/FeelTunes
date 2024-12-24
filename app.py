@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from models import User
 from extensions import db, login_manager
-from flask_login import login_required
+from flask_login import login_required, current_user
 
 
 def create_app():
@@ -44,8 +44,19 @@ def create_app():
     def home():
         return render_template('index.html')
     
+    # use current_user in templates
+    @app.context_processor
+    def inject_user():
+        return {'current_user': current_user}
+    
+    @app.route('/test')
+    def test():
+        return f"Logged in as: {current_user.username if current_user.is_authenticated else 'Not logged in'}"
+
+        
     
     return app
+
 
 # User loader function
 @login_manager.user_loader
