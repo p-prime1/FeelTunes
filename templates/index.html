@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FeelTune</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/headphones.css') }}">
 </head>
 <body>
 
@@ -26,6 +28,9 @@
 
     <!-- Main Content -->
     <main>
+        <div class="headphones-overlay">
+            <img src="{{ url_for('static', filename='graphic/headphones.png') }}" alt="Headphones">
+        </div>
         <h2 class="welcome">Welcome to FeelTune</h2>
         <p class="getstarted" id="typing-text">Your personalized music experience based on your mood!</p>
         <a href="/register" class="get-started-btn">Get Started</a>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from models import User
 from extensions import db, login_manager
+from flask_login import login_required
 
 
 def create_app():
@@ -39,6 +40,7 @@ def create_app():
     app.register_blueprint(logout_bp)
 
     @app.route('/')
+    @login_required
     def home():
         return render_template('index.html')
     
