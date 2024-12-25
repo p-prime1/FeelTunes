@@ -7,7 +7,7 @@ class LoginForm(FlaskForm):
         'Username', 
         validators=[
             DataRequired(), 
-            Length(min=3, max=20),
+            Length(min=3, max=30),
             Regexp(r'^[a-zA-Z0-9_]+$', message="Username must contain only letters, numbers, or underscores.")
         ]
     )
@@ -19,7 +19,7 @@ class RegisterForm(FlaskForm):
         'Username', 
         validators=[
             DataRequired(),
-            Length(min=3, max=20),
+            Length(min=3, max=30),
             Regexp(r'^[a-zA-Z0-9_]+$', message="Username must contain only letters, numbers, or underscores.")
         ]
     )

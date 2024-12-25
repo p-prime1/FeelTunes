@@ -19,6 +19,7 @@ def create_app():
     login_manager.login_view = 'login.login' 
     
     # Register blueprints
+    from cookies import cookies_bp
     from login import login_bp
     from register import register_bp
     from dashboard import dashboard_bp
@@ -29,6 +30,7 @@ def create_app():
     from profile import profile_bp
     from logout import logout_bp
     
+    app.register_blueprint(cookies_bp)
     app.register_blueprint(login_bp, url_prefix='/login')
     app.register_blueprint(register_bp, url_prefix='/register')
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
