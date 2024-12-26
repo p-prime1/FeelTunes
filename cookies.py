@@ -7,7 +7,7 @@ cookies_bp = Blueprint('cookies', __name__)
 @cookies_bp.route('/set_cookie/<username>')
 def set_cookie(username):
     response = make_response(f"Cookie for {username} has been set!")
-    response.set_cookie('username', username, max_age=60*60*24)
+    response.set_cookie('username', username, max_age=60*60*24, samesite='Lax')
     return response
 
 @cookies_bp.route('/get_cookie')
