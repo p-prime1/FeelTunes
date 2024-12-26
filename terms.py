@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request, redirect, url_for
 
-# Define the blueprint
 terms_bp = Blueprint('terms', __name__, template_folder='templates')
 
-# Route for the about page
-@terms_bp.route('/')
+@terms_bp.route('/', methods=['GET', 'POST'])
 def terms():
+    if request.method == 'POST':
+        if 'accept_terms' in request.form:
+            return redirect(url_for('success_page'))
     return render_template('terms.html')
