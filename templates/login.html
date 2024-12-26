@@ -24,6 +24,11 @@
         </nav>
     </header>
 
+    <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; width: 100%; background: #222; color: white; padding: 10px; text-align: center;">
+        This site uses cookies to enhance your experience. 
+        <button id="accept-cookies" style="margin-left: 10px; padding: 5px 10px; background: #4CAF50; color: white; border: none;">Accept</button>
+    </div>
+
     <div class="auth-container">
         <div class="form-container">
             <h1>Login</h1>
@@ -56,6 +61,9 @@
                         <span class="text-danger">{{ error }}</span>
                     {% endfor %}
                 </div>
+                <div class="remember-me">
+                    {{ form.remember_me }} {{ form.remember_me.label }} 
+                </div>
                 <div>
                     {{ form.submit(class="get-started-btn") }}
                 </div>
@@ -72,4 +80,16 @@
         <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
     </footer>
 </body>
+<script>
+    // Show the banner if cookies are not accepted
+    if (!document.cookie.includes("cookies_accepted=true")) {
+        document.getElementById("cookie-consent-banner").style.display = "block";
+    }
+
+    // Set cookie on acceptance
+    document.getElementById("accept-cookies").addEventListener("click", function() {
+        document.cookie = "cookies_accepted=true; path=/; max-age=" + 60 * 60 * 24 * 30; // 30 days
+        document.getElementById("cookie-consent-banner").style.display = "none";
+    });
+</script>
 </html>
