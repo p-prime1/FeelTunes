@@ -11,7 +11,8 @@ def create_app():
     # Configure SQLite database
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+    app.config['REMEMBER_COOKIE_DURATION'] = 60*60*24*7  # 1 week
+    
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
@@ -42,7 +43,6 @@ def create_app():
     app.register_blueprint(logout_bp)
 
     @app.route('/')
-    @login_required
     def home():
         return render_template('index.html')
     

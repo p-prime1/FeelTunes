@@ -90,3 +90,12 @@ p {
         transform: scale(1);
     }
 }
+
+
+.remember-me {
+    display: inline-flex;
+    align-items: center;
+    text-wrap: nowrap;
+    margin: 0.5rem 0;
+    gap: 0.5rem;
+}
