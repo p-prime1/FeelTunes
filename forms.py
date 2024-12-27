@@ -41,3 +41,22 @@ class RegisterForm(FlaskForm):
         ]
     )
     submit = SubmitField('Register')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField(
+        'New Password', 
+        validators=[
+            DataRequired(),
+            Length(min=8),
+            Regexp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$', 
+                   message="Password must contain at least one uppercase letter, one lowercase letter, and one digit.")
+        ]
+    )
+    confirm_password = PasswordField(
+        'Confirm Password', 
+        validators=[
+            DataRequired(),
+            EqualTo('password', message="Passwords must match.")
+        ]
+    )
+    submit = SubmitField('Reset Password')
