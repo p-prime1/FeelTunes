@@ -1,11 +1,11 @@
 from models import User
 
-def test_new_user():
-    """
-    GIVEN a User model
-    WHEN a new User is created
-    THEN check the email, hashed_password
-    """
-    user = User('patric@gmail.com', 'FlaskIsAwesome')
-    assert user.email == 'patric@gmail.com'
-    assert user.hashed_password != 'FlaskIsAwesome'
+def test_valid_user(valid_user):
+    assert valid_user.username == "test"
+    assert valid_user.email == "test@gmail.com"
+    assert valid_user.email is not "test1234"
+
+
+def test_database_session(valid_user, db_session):
+    db_session.add(valid_user)
+    db_session.commit()
