@@ -1,17 +1,34 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, render_template
 from models import User
 from extensions import db, login_manager
 from flask_login import login_required, current_user
+from flask_mail import Mail
 
 
 def create_app():
+    # Load environment variables from .env
+    load_dotenv()
+
     app = Flask(__name__)
-    app.secret_key = "_secret_key_hereYEBDBHBDHJHNBDYH"
+    app.secret_key = os.getenv("SECRET_KEY")  # Fetch from .env
 
     # Configure SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['REMEMBER_COOKIE_DURATION'] = 60*60*24*7  # 1 week
+    app.config['REMEMBER_COOKIE_DURATION'] = 60 * 60 * 24 * 7  # 1 week
+    
+    # Email configuration
+    app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER")
+    app.config['MAIL_PORT'] = int(os.getenv("MAIL_PORT"))
+    app.config['MAIL_USE_TLS'] = os.getenv("MAIL_USE_TLS") == "True"
+    app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+    app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+    app.config['MAIL_DEFAULT_SENDER'] = os.getenv("MAIL_DEFAULT_SENDER")
+    app.config['MAIL_DEBUG'] = os.getenv("MAIL_DEBUG") == "True"
+    mail = Mail()
+    mail.init_app(app)
     
     # Initialize extensions
     db.init_app(app)
