@@ -13,7 +13,11 @@ def register():
         email = form.email.data
         password = form.password.data
         
-        
+        # Validate if the user accepted the terms
+        accept_terms = request.form.get('accept_terms', 'false') == 'true'
+        if not accept_terms:
+            flash("Accept the Terms and Conditions before proceeding.", "danger")
+            return render_template('register.html', form=form)
         
         # Check if the username or email already exists
         if User.query.filter_by(username=username).first():

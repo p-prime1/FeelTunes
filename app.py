@@ -50,7 +50,22 @@ def create_app():
     @app.context_processor
     def inject_user():
         return {'current_user': current_user}
-        
+    
+    @app.route('/terms')
+    def terms():
+        return render_template('terms.html')
+
+    @app.route('/login', methods=['GET', 'POST'])
+    def login():
+        if request.method == 'POST':
+            # Handle login logic here
+            return redirect(url_for('dashboard'))
+        return render_template('login.html')
+
+    @app.route('/dashboard')
+    def dashboard():
+        return "Welcome to the dashboard!"
+
     
     return app
 
