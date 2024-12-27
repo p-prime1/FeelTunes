@@ -30,6 +30,7 @@ def create_app():
     mail = Mail()
     mail.init_app(app)
     
+
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)
@@ -47,6 +48,7 @@ def create_app():
     from terms import terms_bp
     from profile import profile_bp
     from logout import logout_bp
+    from forgot_password import forgot_password_bp
     
     app.register_blueprint(cookies_bp)
     app.register_blueprint(login_bp, url_prefix='/login')
@@ -58,6 +60,7 @@ def create_app():
     app.register_blueprint(terms_bp, url_prefix='/terms')
     app.register_blueprint(profile_bp, url_prefix='/profile')
     app.register_blueprint(logout_bp)
+    app.register_blueprint(forgot_password_bp, url_prefix='/forgot_password')
 
     @app.route('/')
     def home():
