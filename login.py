@@ -18,6 +18,9 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
+            if not user.is_confirmed:
+                flash("Please confirm your email first", "warning")
+                return redirect(url_for('login.login'))
             login_user(user, remember=remember_me)
             flash("Login successful!", "success")
             return redirect(url_for('dashboard.dashboard', form=form))

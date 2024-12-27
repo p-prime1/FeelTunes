@@ -5,3 +5,8 @@ email-validator
 Werkzeug==3.0.0
 LoginManager
 UserMixin
+Flask-Mail
+itsdangerous
+python-dotenv
+
+
