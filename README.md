@@ -48,6 +48,13 @@ FeelTune is an innovative web application that generates personalized playlists 
 ### Deployment:
 
 
+### Tests:
+
+    Usage: export PYTHONPATH=$(pwd)
+	   pytest
+
+
+
 # Usage 🎶
 
     Open the application in your browser: http://localhost:5000.
