@@ -1,6 +1,5 @@
 <<<<<<< HEAD
 *.json
-instance/
 __pycache__/
 *.pyc
 *.pyo
