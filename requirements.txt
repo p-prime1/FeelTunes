@@ -7,4 +7,6 @@ LoginManager
 UserMixin
 Flask-Mail
 itsdangerous
+python-dotenv
+
 
