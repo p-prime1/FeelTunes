@@ -70,6 +70,22 @@
                         <span class="text-danger">{{ error }}</span>
                     {% endfor %}
                 </div>
+                    
+                <form method="POST" action="/submit_terms">
+                    <!-- Terms content -->
+                    <section>
+                        <p>Please read and accept our 
+                            <a href="/terms/" class="switch-link"> Terms of Service </a>
+                        </p>
+                        <!-- Add checkbox here -->
+                        <div class="accept_terms">
+                            <input type="checkbox" id="_accept_terms" name="accept_terms" required>
+                            <label for="accept_terms">I agree to the Terms of Service</label>
+                        </div>
+                    </section>
+                    
+                </form>
+
                 <div>
                     {{ form.submit(class="get-started-btn") }}
                 </div>

@@ -2,14 +2,34 @@
     margin: 20px;
     padding: 10px;
     border-radius: 5px;
+    color: black;
 }
 
 .flash-message.success {
     color: #15dd44;
-    border: 1px solid #c3e6cb;
+    text-wrap: none;
+    font-size: medium;
+    font-weight: bold;
 }
 
 .flash-message.error {
     color: #ffee00;
-    border: 1px solid #f5c6cb;
+    text-wrap: none;
+    font-size: medium;
+    font-weight: bold;
+}
+
+.flash-message.warning {
+    color: darkorange;
+    text-wrap: none;
+    font-size: medium;
+    font-weight: bold;
+}
+
+.flash-message.danger {
+    color: rgb(122, 9, 9);
+    text-wrap: none;
+    font-size: medium;
+    font-weight: bold;
+
 }
