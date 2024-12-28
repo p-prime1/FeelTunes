@@ -60,3 +60,6 @@ class ResetPasswordForm(FlaskForm):
         ]
     )
     submit = SubmitField('Reset Password')
+
+class EmailForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
