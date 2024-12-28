@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.json
 instance/
 __pycache__/
@@ -9,6 +8,4 @@ build/
 *.egg-info
 venv/
 env/
-=======
 .env
->>>>>>> refs/remotes/origin/main
