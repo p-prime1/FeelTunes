@@ -71,7 +71,6 @@
                     {% endfor %}
                 </div>
                     
-                <form method="POST" action="/submit_terms">
                     <!-- Terms content -->
                     <section>
                         <p>Please read and accept our 
@@ -79,12 +78,10 @@
                         </p>
                         <!-- Add checkbox here -->
                         <div class="accept_terms">
-                            <input type="checkbox" id="_accept_terms" name="accept_terms" required>
+                            <input type="checkbox" id="accept_terms" name="accept_terms" required>
                             <label for="accept_terms">I agree to the Terms of Service</label>
                         </div>
                     </section>
-                    
-                </form>
 
                 <div>
                     {{ form.submit(class="get-started-btn") }}
@@ -101,5 +98,16 @@
     <footer>
         <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
     </footer>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (event) {
+            const termsCheckbox = document.getElementById('accept_terms');
+            if (!termsCheckbox.checked) {
+                event.preventDefault();
+                alert('You must agree to the Terms of Service to register.');
+            }
+        });
+    </script>
+    
 </body>
 </html>

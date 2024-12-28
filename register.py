@@ -18,6 +18,11 @@ def register():
         email = form.email.data
         password = form.password.data
         
+        # # Check if the "accept_terms" checkbox is checked
+        # accept_terms = request.form.get('accept_terms')
+        # if not accept_terms:
+        #     flash("You must agree to the Terms of Service to register.", "danger")
+        #     return redirect(url_for('register.register'))
         
         
         # Check if the username or email already exists
@@ -36,6 +41,8 @@ def register():
         
         # Send confirmation email
         send_confirmation_email(email, username)
+        
+        print(confirm_token)
         
         flash("Registration successful! Please check your email to confirm your account.", "info")
         return redirect('/login/')
