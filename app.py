@@ -5,6 +5,7 @@ from models import User
 from extensions import db, login_manager
 from flask_login import login_required, current_user
 from flask_mail import Mail
+from flask_wtf.csrf import CSRFProtect
 
 
 def create_app():
@@ -14,6 +15,9 @@ def create_app():
     app = Flask(__name__)
     app.secret_key = os.getenv("SECRET_KEY")  # Fetch from .env
 
+    # Initialize CSRF protection
+    CSRFProtect(app)
+    
     # Configure SQLite database
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -28,9 +32,10 @@ def create_app():
     app.config['MAIL_DEFAULT_SENDER'] = os.getenv("MAIL_DEFAULT_SENDER")
     app.config['MAIL_DEBUG'] = os.getenv("MAIL_DEBUG") == "True"
     mail = Mail()
+
     mail.init_app(app)
     
-
+    
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)

@@ -3,7 +3,7 @@ from itsdangerous import URLSafeTimedSerializer
 from models import User, db
 from werkzeug.security import generate_password_hash
 from utils import send_email
-from forms import ResetPasswordForm
+from forms import ResetPasswordForm, EmailForm
 
 forgot_password_bp = Blueprint('forgot_password', __name__)
 
@@ -21,8 +21,15 @@ def confirm_reset_token(token, expiration=3600):
 
 @forgot_password_bp.route('/', methods=['GET', 'POST'])
 def forgot_password():
-    if request.method == 'POST':
+
+    form = EmailForm()
+    
+    if request.method == "POST":
         email = request.form.get('email')
+        if not email:
+            flash("The reset link is invalid or has expired.", "danger")
+            return redirect(url_for('forgot_password.forgot_password'))
+    
         user = User.query.filter_by(email=email).first()
         if user:
             # Generate reset token
@@ -39,16 +46,13 @@ def forgot_password():
             flash("Email not found.", "danger")
         return redirect(url_for('forgot_password.forgot_password'))
 
-    return render_template('forgot_password.html')
+    return render_template('forgot_password.html', form=form)
 
 
 @forgot_password_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
     email = confirm_reset_token(token)
-    if not email:
-        flash("The reset link is invalid or has expired.", "danger")
-        return redirect(url_for('forgot_password.forgot_password'))
-    
+
     form = ResetPasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=email).first()
@@ -65,6 +69,6 @@ def reset_password(token):
         else:
             flash("User not found.", "danger")
 
-    print("Decoded email:", email)
+
 
     return render_template('reset_password.html', token=token, form=form)   
