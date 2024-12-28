@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flashed.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loginextend.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/headphones.css') }}">
 </head>
 <body>
     <!-- Header with navigation -->
@@ -23,6 +24,10 @@
             <a href="/register">Register</a>
         </nav>
     </header>
+
+    <div class="headphones-overlay">
+        <img src="{{ url_for('static', filename='graphic/headphones.png') }}" alt="Headphones">
+    </div>
 
     <div class="auth-container">
         <div class="form-container">

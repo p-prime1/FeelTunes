@@ -8,5 +8,6 @@ UserMixin
 Flask-Mail
 itsdangerous
 python-dotenv
+flask_session
 
 

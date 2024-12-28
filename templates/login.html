@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/flashed.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/loginextend.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/slidebutton.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/headphones.css') }}">
 </head>
 <body>
     <!-- Header with navigation -->
@@ -28,7 +29,9 @@
         This site uses cookies to enhance your experience. 
         <button id="accept-cookies" style="margin-left: 10px; padding: 5px 10px; background: #4CAF50; color: white; border: none;">Accept</button>
     </div>
-
+    <div class="headphones-overlay">
+        <img src="{{ url_for('static', filename='graphic/headphones.png') }}" alt="Headphones">
+    </div>
     <div class="auth-container">
         <div class="form-container">
             <h1>Login</h1>
