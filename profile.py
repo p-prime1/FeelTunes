@@ -28,3 +28,24 @@ def profile():
         return redirect(url_for('profile.profile'))
     
     return render_template('profile.html', user=current_user, form=form)
+
+@profile_bp.route('/profile/edit', methods=['GET', 'POST'])
+def edit_profile():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+
+    #Validating user information
+        if username:
+            current_user.username = username
+        if email:
+            current_user.email = email
+        if password:
+            current_user.password = generate_password_hash(password)
+
+        db.session.commit()
+
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile', user_id=current_user.id))
+    return render_template('edit_profile.html', user=current_user)
