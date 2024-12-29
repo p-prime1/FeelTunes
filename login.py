@@ -4,6 +4,7 @@ from flask_login import login_user
 from models import User
 from forms import LoginForm
 
+
 login_bp = Blueprint('login', __name__)
 
 @login_bp.route('/', methods=['GET', 'POST'])
@@ -18,18 +19,25 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
+            login_user(user, remember=remember_me)
+            session['user_id'] = user.id
+            session.permanent = True
+
             if not user.is_confirmed:
                 flash("Please confirm your email first", "warning")
                 return redirect(url_for('login.login'))
-            login_user(user, remember=remember_me)
+        
+            
+            # Set session variables
+            session['user_id'] = user.id
+            session['username'] = user.username
+            session['email'] = user.email
+            session['logged_in'] = True
+
+            
             flash("Login successful!", "success")
             return redirect(url_for('dashboard.dashboard', form=form))
-        
-            response = make_response(redirect(url_for('dashboard.dashboard')))
-            if not request.cookies.get('cookies_accepted'):
-                response.set_cookie('cookies_accepted', 'true', max_age=60*60*24*30)  # 30 days
-            flash("Login successful!", "success")
-            return response
+
         else:
             flash("Invalid username or password", "danger")
 

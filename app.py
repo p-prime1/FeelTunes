@@ -1,11 +1,12 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from models import User
 from extensions import db, login_manager
-from flask_login import login_required, current_user
+from flask_login import current_user
 from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
+from flask_session import Session
 
 
 def create_app():
@@ -18,10 +19,21 @@ def create_app():
     # Initialize CSRF protection
     CSRFProtect(app)
     
+    # flask force to clear cache each time
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+    
     # Configure SQLite database
     app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    
+    # Cookies duration
     app.config['REMEMBER_COOKIE_DURATION'] = 60 * 60 * 24 * 7  # 1 week
+    
+    # Session implementaion
+    app.config["SESSION_PERMANENT"] = True
+    app.config["SESSION_TYPE"] = "filesystem"
+    Session(app)
     
     # Email configuration
     app.config['MAIL_SERVER'] = os.getenv("MAIL_SERVER")
