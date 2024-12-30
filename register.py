@@ -28,9 +28,11 @@ def register():
         # Check if the username or email already exists
         if User.query.filter_by(username=username).first():
             flash("Username already exists", "danger")
+            db.session.rollback()
             return render_template('register.html', form=form)
         if User.query.filter_by(email=email).first():
             flash("Email already registered", "danger")
+            db.session.rollback()
             return render_template('register.html', form=form)
         
         # Hash the password and save user to the database
@@ -42,7 +44,6 @@ def register():
         # Send confirmation email
         send_confirmation_email(email, username)
         
-        print(confirm_token)
         
         flash("Registration successful! Please check your email to confirm your account.", "info")
         return redirect('/login/')

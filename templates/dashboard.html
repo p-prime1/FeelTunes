@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardextend.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboarddropdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/playlist.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
@@ -39,17 +40,15 @@
         <h1>Welcome, {{ user.username }}!</h1>
         <p>Select your mood to generate a playlist:</p>
 
+
         <!-- Mood Selection -->
-        <form id="mood-form">
-            <select id="mood-select" name="mood" required>
-                <option value="" disabled selected>Choose your mood</option>
-                <option value="happy">Happy</option>
-                <option value="sad">Sad</option>
-                <option value="relaxed">Relaxed</option>
-                <option value="energetic">Energetic</option>
-            </select>
+        <form id="mood-form" method="POST" action="{{ url_for('dashboard.generate_playlist') }}">
+            {{ form.hidden_tag() }}
+            <label for="mood-input">Enter your mood:</label>
+            <input type="text" id="mood-input" name="mood" placeholder="e.g., energetic, relaxed">
             <button type="submit">Generate Playlist</button>
         </form>
+        
 
         <!-- Flash Message -->
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -62,70 +61,75 @@
         {% endif %}
         {% endwith %}
 
+
         <!-- Playlist Display -->
-        <div id="playlist-container">
+        <div id="playlist-container ">
             <h2>Playlist:</h2>
             <ul id="playlist"></ul>
         </div>
+        
     </div>
 
     <footer>
         <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
     </footer>
+    
+</body><script>
+    const csrfToken = "{{ csrf_token() }}";
+    document.getElementById('mood-form').addEventListener('submit', function (e) {
+        e.preventDefault(); // Prevent form from submitting normally
+        
+        const mood = document.getElementById('mood-input').value; // Get mood input value
 
+        if (!mood) {
+            alert("Please enter a mood.");
+            return;
+        }
 
-    <script>
-        // Handle mood selection and fetch playlist
-        $(document).ready(function() {
-            $('#mood-form').on('submit', function(e) {
-                e.preventDefault();
-                const mood = $('#mood-select').val();
-                
-                if (mood) {
-                    $.ajax({
-                        url: '/dashboard/generate-playlist/',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({ mood: mood }),
-                        success: function(response) {
-                            const playlist = response.playlist;
-                            const $playlistContainer = $('#playlist');
-                            $playlistContainer.empty();
+        console.log('Payload:', { mood: mood });
 
-                            if (playlist && playlist.length > 0) {
-                                playlist.forEach(song => {
-                                    $playlistContainer.append(
-                                        `<li><a href="${song.url}" target="_blank">${song.title} - ${song.artist}</a></li>`
-                                    );
-                                });
-                            } else {
-                                $playlistContainer.append('<li>No songs found for this mood.</li>');
-                            }
-                        },
-                        error: function() {
-                            alert('Error fetching playlist. Please try again.');
-                        }
-                    });
-                }
-            });
-        });
-        $(document).ready(function () {
-        const $userName = $('#user-name');
-        const $userDropdown = $('#user-dropdown');
+        fetch('/dashboard/generate_playlist/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ mood: mood }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const playlistContainer = document.getElementById('playlist');
+            playlistContainer.innerHTML = ''; // Clear existing content
 
-        $userName.on('click', function (e) {
-            e.preventDefault();
-            $userDropdown.toggleClass('active');
-        });
-
-        // Hide dropdown when clicking outside
-        $(document).on('click', function (e) {
-            if (!$userName.is(e.target) && !$userDropdown.is(e.target) && $userDropdown.has(e.target).length === 0) {
-                $userDropdown.removeClass('active');
+            if (data.error) {
+                alert(data.error);
+                return;
             }
+
+            if (data.playlist && data.playlist.length > 0) {
+                data.playlist.forEach(song => {
+                    const li = document.createElement('li');
+                    li.classList.add('playlist-item');
+                    li.innerHTML = `
+                        <div class="playlist-info">
+                            <img src="${song.image}" alt="${song.name}" class="playlist-image">
+                            <a href="${song.url}" target="_blank">${song.name}</a>
+                            <p>${song.description}</p>
+                        </div>
+                    `;
+                    playlistContainer.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No playlists found for this mood.';
+                playlistContainer.appendChild(li);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching playlist:', error);
+            alert('Error fetching playlist. Please try again.');
         });
     });
-    </script>
-    
-</body>
+</script>
 </html>
+
