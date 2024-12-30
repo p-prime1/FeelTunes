@@ -51,6 +51,10 @@
             <button type="submit">Generate Playlist</button>
         </form>
 
+	<!-- Audio player -->
+	<audio controls="controls" autoplay="autoplay"></audio>
+	
+
         <!-- Flash Message -->
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -65,7 +69,11 @@
         <!-- Playlist Display -->
         <div id="playlist-container">
             <h2>Playlist:</h2>
-            <ul id="playlist"></ul>
+            <ul id="playlist">
+		    {% for song in songs %}
+		    <li><a href="javascript:void();" onclick="playSong('{{song}}')">{{ song }}</a></li>
+		    {% endfor %}
+	    </ul>
         </div>
     </div>
 
@@ -73,6 +81,11 @@
         <p>&copy; 2025 FeelTune. All rights reserved. | <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
     </footer>
 
+    <script type="text/javascript">
+	    function playSong(song){
+		$('audio').attr('src', '/static/music/'+song);
+	    }
+    </script>
 
     <script>
         // Handle mood selection and fetch playlist
