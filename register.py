@@ -58,7 +58,6 @@ def send_confirmation_email(email, username):
         body = f"Hi {username},\n\nWelcome to FeelTunes! Please confirm your email by clicking the link below:\n{confirm_url}, \n\nBest regards,\nFeelTunes Team"
         
         msg = Message(subject, recipients=[email], body=body)
-        mail = current_app.extensions.get('mail')
         mail.send(msg)
         
         print(f"Confirmation email sent to {email}")

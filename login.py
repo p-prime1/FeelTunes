@@ -3,6 +3,7 @@ from werkzeug.security import check_password_hash
 from flask_login import login_user
 from models import User
 from forms import LoginForm
+from app import mongo
 
 
 login_bp = Blueprint('login', __name__)
@@ -16,22 +17,21 @@ def login():
         remember_me = form.remember_me.data
         
         # Fetch user from the database
-        user = User.query.filter_by(username=username).first()
+        user = mongo.db.users.find_one({"username": username})
 
-        if user and check_password_hash(user.password, password):
-            login_user(user, remember=remember_me)
-            session['user_id'] = user.id
-            session.permanent = True
+        if user and check_password_hash(user[password], password):
+            user_obj = User(user)
+            login_user(user_obj, remember=remember_me)
 
-            if not user.is_confirmed:
+            if not user["is_confirmed"]:
                 flash("Please confirm your email first", "warning")
                 return redirect(url_for('login.login'))
         
             
             # Set session variables
-            session['user_id'] = user.id
-            session['username'] = user.username
-            session['email'] = user.email
+            session['user_id'] = str(user["_id"])
+            session['username'] = user["username"]
+            session['email'] = user["email"]
             session['logged_in'] = True
 
             
