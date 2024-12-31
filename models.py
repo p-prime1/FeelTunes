@@ -1,13 +1,19 @@
-from extensions import db
-from flask_login import UserMixin
+from bson.objectid import ObjectId
+from werkzeug.security import check_password_hash
 
+class User:
+    def __init__(self, user_data):
+        self.id = str(user_data['_id'])
+        self.username = user_data['username']
+        self.email = user_data['email']
+        self.password = user_data['password']
+        self.bio = user_data.get('bio', '')
+        self.avatar = user_data.get('avatar', '')
 
-class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False, unique=True)
-    email = db.Column(db.String(120), nullable=False, unique=True)
-    password = db.Column(db.String(200), nullable=False)
-    is_confirmed = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return f"<User {self.username}>"
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+        
+    @staticmethod
+    def get(user_id):
+        user_data = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        return User(user_data) if user_data else None
