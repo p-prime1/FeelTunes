@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from werkzeug.security import generate_password_hash
-from models import User, db
+from bson.objectid import ObjectId
 from forms import RegisterForm
 from send_confirmation_email import generate_confirmation_token, confirm_token
 from flask import current_app
@@ -25,19 +25,20 @@ def register():
         #     return redirect(url_for('register.register'))
         
         
-        # Check if the username or email already exists
-        if User.query.filter_by(username=username).first():
-            flash("Username already exists", "danger")
-            return render_template('register.html', form=form)
-        if User.query.filter_by(email=email).first():
+        # Check if the email already exists
+        if current_app.mongo.db.users.find_one({"email": email}):
             flash("Email already registered", "danger")
             return render_template('register.html', form=form)
         
         # Hash the password and save user to the database
         hashed_password = generate_password_hash(password)
-        new_user = User(username=username, email=email, password=hashed_password)
-        db.session.add(new_user)
-        db.session.commit()
+        new_user = {
+            "username": username,
+            "email": email,
+            "password": hashed_password,
+            "is_confirmed": False
+        }
+        current_app.mongo.db.users.insert_one(new_user)
         
         # Send confirmation email
         send_confirmation_email(email, username)
@@ -72,11 +73,12 @@ def confirm_email(token):
         flash("The confirmation link is invalid or has expired.", "danger")
         return redirect('/register/')
 
-    user = User.query.filter_by(email=email).first_or_404()
-    if user.is_confirmed:
+    user = current_app.mongo.db.users.find_one({"email": email})
+    if user and user.get("is_confirmed"):
         flash("Account already confirmed. Please log in.", "success")
-    else:
-        user.is_confirmed = True
-        db.session.commit()
+    elif user:
+        current_app.mongo.db.users.update_one({"_id": user["_id"]}, {"$set": {"is_confirmed": True}})
         flash("Your email has been confirmed. You can now log in.", "success")
+    else:
+        flash("User not found", "danger")
     return redirect('/login/')

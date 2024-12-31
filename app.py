@@ -9,6 +9,8 @@ from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_pymongo import PyMongo
 
+mongo = PyMongo
+
 
 def create_app():
     # Load environment variables from .env
@@ -24,9 +26,9 @@ def create_app():
     app.config['TEMPLATES_AUTO_RELOAD'] = True
 
     
-    # Configure SQLite database
+    # Configure MongoDB
     app.config['MONGO_URI'] = os.getenv("MONGO_URI")
-    mongo = PyMongo(app)
+    mongo.init_app(app)
     
     # Cookies duration
     app.config['REMEMBER_COOKIE_DURATION'] = 60 * 60 * 24 * 7  # 1 week
@@ -50,7 +52,6 @@ def create_app():
     
     
     # Initialize extensions
-    mongo.init_app(app)
     login_manager.init_app(app)
     # Set the login view route (for redirecting unauthenticated users)
     login_manager.login_view = 'login.login' 

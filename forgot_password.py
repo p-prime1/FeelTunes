@@ -1,9 +1,10 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
 from itsdangerous import URLSafeTimedSerializer
-from models import User, db
+from models import User
 from werkzeug.security import generate_password_hash
 from utils import send_email
 from forms import ResetPasswordForm, EmailForm
+from bson.objectid import ObjectId
 
 forgot_password_bp = Blueprint('forgot_password', __name__)
 
@@ -30,7 +31,10 @@ def forgot_password():
             flash("The reset link is invalid or has expired.", "danger")
             return redirect(url_for('forgot_password.forgot_password'))
     
-        user = User.query.filter_by(email=email).first()
+        if form.validate_on_submit():
+            email = form.email.data
+            current_app.mongo = current_app.extensions['pymongo']
+            user = current_app.mongo.db.users.find_one({"email": email})
         if user:
             # Generate reset token
             token = generate_reset_token(email)
@@ -55,11 +59,14 @@ def reset_password(token):
 
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=email).first()
+        current_app.mongo = current_app.extensions['pymongo']
+        user = current_app.mongo.db.users.find_one({"email": email})
         if user:
             try:
-                user.password = generate_password_hash(form.password.data)
-                db.session.commit()
+                current_app.mongo.db.users.update_one(
+                    {"_id": ObjectId(user["_id"])},
+                    {"$set": {password: generate_password_hash(form.password.data)}}
+                )
                 
                 flash("Your password has been reset. You can now log in.", "success")
                 return redirect(url_for('login.login'))
