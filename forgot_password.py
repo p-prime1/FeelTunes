@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 from utils import send_email
 from forms import ResetPasswordForm, EmailForm
 from bson.objectid import ObjectId
+from app import mongo
 
 forgot_password_bp = Blueprint('forgot_password', __name__)
 
@@ -33,8 +34,8 @@ def forgot_password():
     
         if form.validate_on_submit():
             email = form.email.data
-            current_app.mongo = current_app.extensions['pymongo']
-            user = current_app.mongo.db.users.find_one({"email": email})
+            mongo = current_app.extensions['pymongo']
+            user = mongo.db.users.find_one({"email": email})
         if user:
             # Generate reset token
             token = generate_reset_token(email)
@@ -59,11 +60,11 @@ def reset_password(token):
 
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        current_app.mongo = current_app.extensions['pymongo']
-        user = current_app.mongo.db.users.find_one({"email": email})
+        mongo = current_app.extensions['pymongo']
+        user = mongo.db.users.find_one({"email": email})
         if user:
             try:
-                current_app.mongo.db.users.update_one(
+                mongo.db.users.update_one(
                     {"_id": ObjectId(user["_id"])},
                     {"$set": {password: generate_password_hash(form.password.data)}}
                 )
@@ -71,7 +72,6 @@ def reset_password(token):
                 flash("Your password has been reset. You can now log in.", "success")
                 return redirect(url_for('login.login'))
             except Exception as e:
-                db.session.rollback()
                 flash("An error occurred while resetting the password. Please try again.", "danger")
         else:
             flash("User not found.", "danger")

@@ -9,7 +9,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_pymongo import PyMongo
 
-mongo = PyMongo
+mongo = PyMongo()
 
 
 def create_app():

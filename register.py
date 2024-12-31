@@ -5,6 +5,7 @@ from forms import RegisterForm
 from send_confirmation_email import generate_confirmation_token, confirm_token
 from flask import current_app
 from flask_mail import Mail, Message
+from app import mongo
 
 mail = Mail()
 register_bp = Blueprint('register', __name__)
@@ -26,7 +27,7 @@ def register():
         
         
         # Check if the email already exists
-        if current_app.mongo.db.users.find_one({"email": email}):
+        if mongo.db.users.find_one({"email": email}):
             flash("Email already registered", "danger")
             return render_template('register.html', form=form)
         
@@ -38,7 +39,7 @@ def register():
             "password": hashed_password,
             "is_confirmed": False
         }
-        current_app.mongo.db.users.insert_one(new_user)
+        mongo.db.users.insert_one(new_user)
         
         # Send confirmation email
         send_confirmation_email(email, username)
@@ -73,11 +74,11 @@ def confirm_email(token):
         flash("The confirmation link is invalid or has expired.", "danger")
         return redirect('/register/')
 
-    user = current_app.mongo.db.users.find_one({"email": email})
+    user = mongo.db.users.find_one({"email": email})
     if user and user.get("is_confirmed"):
         flash("Account already confirmed. Please log in.", "success")
     elif user:
-        current_app.mongo.db.users.update_one({"_id": user["_id"]}, {"$set": {"is_confirmed": True}})
+        mongo.db.users.update_one({"_id": user["_id"]}, {"$set": {"is_confirmed": True}})
         flash("Your email has been confirmed. You can now log in.", "success")
     else:
         flash("User not found", "danger")

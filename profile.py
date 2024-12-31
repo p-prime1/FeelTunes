@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
 from profileupdateform import ProfileUpdateForm
 from bson.objectid import ObjectId
+from app import mongo
 
 profile_bp = Blueprint('profile', __name__, template_folder='templates')
 
@@ -19,7 +20,7 @@ def profile():
         update_data['password'] = generate_password_hash(form.password.data)
 
         try:
-            current_app.mongo.db.users.update_one(
+            mongo.db.users.update_one(
                 {'_id': ObjectId(current_user.id)},
                 {'$set': {'email': form.email.data, 'password': generate_password_hash(form.password.data)}}    
             )
@@ -52,12 +53,12 @@ def edit_profile():
             current_user.password = hashed_password
 
         if update_data:  # Update only if there's something to change
-            current_app.mongo.db.users.update_one({'_id': ObjectId(current_user.id)}, {'$set': update_data})
+            mongo.db.users.update_one({'_id': ObjectId(current_user.id)}, {'$set': update_data})
             flash('Profile updated successfully!', 'success')
         else:
             flash('No changes were made.', 'info')
 
         return redirect(url_for('profile.profile'))
 
-    user = current_app.mongo.db.users.find_one({"_id": ObjectId(current_user.id)})
+    user = mongo.db.users.find_one({"_id": ObjectId(current_user.id)})
     return render_template('edit_profile.html', user=user)
