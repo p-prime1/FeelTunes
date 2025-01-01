@@ -2,11 +2,14 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, session
 from models import User
-from extensions import db, login_manager
+from extensions import login_manager
 from flask_login import current_user
 from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
+from flask_pymongo import PyMongo
+
+mongo = PyMongo()
 
 
 def create_app():
@@ -23,9 +26,9 @@ def create_app():
     app.config['TEMPLATES_AUTO_RELOAD'] = True
 
     
-    # Configure SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("SQLALCHEMY_DATABASE_URI")
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    # Configure MongoDB
+    app.config['MONGO_URI'] = os.getenv("MONGO_URI")
+    mongo.init_app(app)
     
     # Cookies duration
     app.config['REMEMBER_COOKIE_DURATION'] = 60 * 60 * 24 * 7  # 1 week
@@ -49,7 +52,6 @@ def create_app():
     
     
     # Initialize extensions
-    db.init_app(app)
     login_manager.init_app(app)
     # Set the login view route (for redirecting unauthenticated users)
     login_manager.login_view = 'login.login' 
@@ -95,4 +97,5 @@ def create_app():
 # User loader function
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id)) 
+    user_data = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    return User(user_data) if user_data else None 
