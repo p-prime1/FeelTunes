@@ -8,9 +8,11 @@ from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_pymongo import PyMongo
+from pymongo import MongoClient
+from pymongo.server_api import ServerApi
+from bson.objectid import ObjectId
 
 mongo = PyMongo()
-
 
 def create_app():
     # Load environment variables from .env
@@ -22,18 +24,26 @@ def create_app():
     # Initialize CSRF protection
     CSRFProtect(app)
     
-    # flask force to clear cache each time
+    # Flask force to clear cache each time
     app.config['TEMPLATES_AUTO_RELOAD'] = True
 
-    
     # Configure MongoDB
     app.config['MONGO_URI'] = os.getenv("MONGO_URI")
+
+    # Initialize MongoDB client and test connection
+    mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'))
+    try:
+        mongo_client.admin.command('ping')
+        print("Connected to MongoDB Atlas")
+    except Exception as e:
+        print(f"Connection failed: {e}")
+
     mongo.init_app(app)
     
     # Cookies duration
     app.config['REMEMBER_COOKIE_DURATION'] = 60 * 60 * 24 * 7  # 1 week
     
-    # Session implementaion
+    # Session implementation
     app.config["SESSION_PERMANENT"] = True
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
@@ -47,9 +57,7 @@ def create_app():
     app.config['MAIL_DEFAULT_SENDER'] = os.getenv("MAIL_DEFAULT_SENDER")
     app.config['MAIL_DEBUG'] = os.getenv("MAIL_DEBUG") == "True"
     mail = Mail()
-
     mail.init_app(app)
-    
     
     # Initialize extensions
     login_manager.init_app(app)
@@ -85,17 +93,15 @@ def create_app():
     def home():
         return render_template('index.html')
     
-    # use current_user in templates
+    # Use current_user in templates
     @app.context_processor
     def inject_user():
         return {'current_user': current_user}
         
-    
     return app
-
 
 # User loader function
 @login_manager.user_loader
 def load_user(user_id):
     user_data = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-    return User(user_data) if user_data else None 
+    return User(user_data) if user_data else None
