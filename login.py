@@ -19,7 +19,7 @@ def login():
         # Fetch user from the database
         user = mongo.db.users.find_one({"username": username})
 
-        if user and check_password_hash(user[password], password):
+        if user and check_password_hash(user['password'], password):
             user_obj = User(user)
             login_user(user_obj, remember=remember_me)
 

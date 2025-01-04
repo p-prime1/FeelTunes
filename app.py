@@ -8,6 +8,7 @@ from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_pymongo import PyMongo
+from bson import ObjectId
 
 mongo = PyMongo()
 
