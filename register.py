@@ -26,7 +26,6 @@ def register():
         #     return redirect(url_for('register.register'))
         
         
-        # Check if the email already exists
         if mongo.db.users.find_one({"email": email}):
             flash("Email already registered", "danger")
             return render_template('register.html', form=form)

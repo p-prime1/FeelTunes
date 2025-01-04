@@ -8,10 +8,9 @@ from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from flask_session import Session
 from flask_pymongo import PyMongo
-from pymongo import MongoClient
-from pymongo.server_api import ServerApi
 from bson.objectid import ObjectId
 
+# Initialize PyMongo without creating an app context
 mongo = PyMongo()
 
 def create_app():
@@ -30,15 +29,20 @@ def create_app():
     # Configure MongoDB
     app.config['MONGO_URI'] = os.getenv("MONGO_URI")
 
-    # Initialize MongoDB client and test connection
-    mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'))
-    try:
-        mongo_client.admin.command('ping')
-        print("Connected to MongoDB Atlas")
-    except Exception as e:
-        print(f"Connection failed: {e}")
-
+    # Initialize PyMongo with the Flask app
     mongo.init_app(app)
+
+    # Ensure the app context is pushed to test the MongoDB connection
+    with app.app_context():
+        try:
+            mongo.cx.admin.command('ping')
+            print("Connected to MongoDB Atlas")
+        except Exception as e:
+            print(f"Connection failed: {e}")
+
+        print("MongoDb initialized:", mongo.db)
+        print("MongoDB connection:", mongo)
+        print("MONGO_URI from .env:", os.getenv("MONGO_URI"))
     
     # Cookies duration
     app.config['REMEMBER_COOKIE_DURATION'] = 60 * 60 * 24 * 7  # 1 week
