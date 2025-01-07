@@ -1,4 +1,5 @@
 import os
+from flask import request, redirect, url_for
 from dotenv import load_dotenv
 from flask import Flask, render_template, session
 from models import User
@@ -32,6 +33,8 @@ def create_app():
     
     # Session implementaion
     app.config["SESSION_PERMANENT"] = True
+    app.config["SESSION_USE_SIGNER"] = True
+    app.config["PERMANENT_SESSION_LIFETIME"] = 60 * 60 * 24 * 7
     app.config["SESSION_TYPE"] = "filesystem"
     Session(app)
     
@@ -47,6 +50,9 @@ def create_app():
 
     mail.init_app(app)
     
+    # Set the folder to save avatar images
+    app.config['UPLOAD_FOLDER'] = os.path.join(os.getcwd(), 'static/uploads')
+
     
     # Initialize extensions
     db.init_app(app)
@@ -66,6 +72,10 @@ def create_app():
     from profile import profile_bp
     from logout import logout_bp
     from forgot_password import forgot_password_bp
+    from history import history_bp
+
+
+
     
     app.register_blueprint(cookies_bp)
     app.register_blueprint(login_bp, url_prefix='/login')
@@ -78,6 +88,7 @@ def create_app():
     app.register_blueprint(profile_bp, url_prefix='/profile')
     app.register_blueprint(logout_bp)
     app.register_blueprint(forgot_password_bp, url_prefix='/forgot_password')
+    app.register_blueprint(history_bp, url_prefix='/history')
 
     @app.route('/')
     def home():
@@ -86,8 +97,17 @@ def create_app():
     # use current_user in templates
     @app.context_processor
     def inject_user():
-        return {'current_user': current_user}
-        
+        if current_user.is_authenticated:
+            # Add a default avatar if the user's avatar is not set
+            user_data = {
+                'username': current_user.username,
+                'avatar': current_user.avatar if hasattr(current_user, 'avatar') and current_user.avatar else 'default_avatar.png'
+            }
+        else:
+            user_data = None  # No user data if not authenticated
+
+        return {'current_user': user_data}
+    
     
     return app
 
