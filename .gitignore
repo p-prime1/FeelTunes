@@ -9,4 +9,5 @@ build/
 *.egg-info
 venv/
 env/
-.env
+.env    
+flask_session/
