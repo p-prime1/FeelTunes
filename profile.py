@@ -1,8 +1,6 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
-import cloudinary
-import cloudinary.uploader
 from extensions import db
 import os
 from werkzeug.utils import secure_filename
