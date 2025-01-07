@@ -1,0 +1,65 @@
+/* General navigation styling */
+nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-name {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.user-menu:hover .dropdown {
+    display: block;
+}
+
+/* Dropdown menu styling */
+.dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-width: 150px;
+    z-index: 10;
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.dropdown a:hover {
+    background-color: #f4f4f4;
+    color: #000;
+}
+
+/* Style for the avatar in the header */
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.avatar-rounded {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff; /* Optional border for better visibility */
+}

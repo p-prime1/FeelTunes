@@ -1,0 +1,136 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0008a0; /* Set background color */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the footer stays at the bottom */
+    transition: background-color 2s ease; /* Smooth transition for background color */
+}
+
+/* Header Styles */
+header {
+    background-color: #c9c9c9;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    height: 40px; 
+} 
+
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    max-width: 120px; 
+    height: auto;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+nav {
+    display: flex;
+    gap: 15px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 8px 15px;
+    position: relative;
+    transition: color 0.3s, transform 0.3s;
+}
+
+nav a::before {
+    content: '';
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background-color: #0066cc;
+    left: 50%;
+    bottom: -5px;
+    transition: width 0.3s, left 0.3s;
+}
+
+nav a:hover {
+    color: #c7b302;
+    transform: translateY(-2px); /* Slightly lift the link on hover */
+}
+
+nav a:hover::before {
+    width: 100%;
+    left: 0%;
+}
+
+nav a:active {
+    transform: translateY(0);
+    color: #ff6347; /* Change to a vibrant color on click */
+}
+
+/* Main Content Styles */
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.getstarted {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 2rem;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid white;
+}
+
+.welcome {
+    font-size: 4rem;
+    margin-top: 10px;
+}
+/*
+.get-started-btn {
+    background-color: #0066cc;
+    color: white;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.get-started-btn:hover {
+    background-color: #005bb5;
+}
+    */
+
+/* Footer Styles */
+footer {
+    background-color: transparent;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    margin-top: auto; /* Ensure footer stays at the bottom */
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 5px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
