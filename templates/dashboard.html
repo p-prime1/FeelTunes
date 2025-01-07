@@ -10,10 +10,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardextend.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboarddropdown.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/headphones.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/playlist.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+
+        <div class="headphones-overlay">
+            <img src="{{ url_for('static', filename='graphic/headphones.png') }}" alt="Headphones">
+        </div>
         <!-- Header with navigation -->
         <header>
             <div class="header-left">
