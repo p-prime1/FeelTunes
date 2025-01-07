@@ -1,11 +1,9 @@
 from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
 from itsdangerous import URLSafeTimedSerializer
-from models import User
+from models import User, db
 from werkzeug.security import generate_password_hash
 from utils import send_email
 from forms import ResetPasswordForm, EmailForm
-from bson.objectid import ObjectId
-from app import mongo
 
 forgot_password_bp = Blueprint('forgot_password', __name__)
 
@@ -32,10 +30,7 @@ def forgot_password():
             flash("The reset link is invalid or has expired.", "danger")
             return redirect(url_for('forgot_password.forgot_password'))
     
-        if form.validate_on_submit():
-            email = form.email.data
-            mongo = current_app.extensions['pymongo']
-            user = mongo.db.users.find_one({"email": email})
+        user = User.query.filter_by(email=email).first()
         if user:
             # Generate reset token
             token = generate_reset_token(email)
@@ -60,22 +55,20 @@ def reset_password(token):
 
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        mongo = current_app.extensions['pymongo']
-        user = mongo.db.users.find_one({"email": email})
+        user = User.query.filter_by(email=email).first()
         if user:
             try:
-                mongo.db.users.update_one(
-                    {"_id": ObjectId(user["_id"])},
-                    {"$set": {password: generate_password_hash(form.password.data)}}
-                )
+                user.password = generate_password_hash(form.password.data)
+                db.session.commit()
                 
                 flash("Your password has been reset. You can now log in.", "success")
                 return redirect(url_for('login.login'))
             except Exception as e:
+                db.session.rollback()
                 flash("An error occurred while resetting the password. Please try again.", "danger")
         else:
             flash("User not found.", "danger")
 
 
 
-    return render_template('reset_password.html', token=token, form=form)   
+    return render_template('reset_password.html', token=token, form=form)  
