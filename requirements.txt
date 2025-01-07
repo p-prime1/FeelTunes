@@ -9,5 +9,6 @@ itsdangerous
 python-dotenv
 flask_session
 gunicorn
+requests
 
 
