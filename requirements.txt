@@ -1,8 +1,8 @@
 Flask
-Flask-SQLAlchemy==3.0.0
+Flask-SQLAlchemy
 flask_wtf
 email-validator
-Werkzeug==3.0.0
+Werkzeug
 Flask-Login
 Flask-Mail
 itsdangerous
