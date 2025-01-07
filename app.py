@@ -60,6 +60,9 @@ def create_app():
     # Set the login view route (for redirecting unauthenticated users)
     login_manager.login_view = 'login.login'
 
+    with app.app_context():
+        db.create_all()
+    
     # Register blueprints
     from cookies import cookies_bp
     from login import login_bp
