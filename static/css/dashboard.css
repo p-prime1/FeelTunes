@@ -1,7 +1,7 @@
 .dashboard-container, .profile-container {
     text-align: center;
     max-width: 600px;
-    margin: 2rem auto;
+    margin-top: 40px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     padding: 2rem;
@@ -54,3 +54,58 @@ button:hover {
 #playlist-container a:hover {
     color: #ff9900;
 }
+
+
+
+/* Style for the mood display in the header */
+.mood-display {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    margin-left: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.mood-display span {
+    margin-right: 10px;
+}
+
+/* Style for the mood form */
+.mood-form-container {
+    margin: 20px;
+    text-align: left;
+}
+
+#mood-state-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#mood-state-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#mood-state-form input {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#mood-state-form button {
+    background-color: #007BFF;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#mood-state-form button:hover {
+    background-color: #0056b3;
+}
+
+

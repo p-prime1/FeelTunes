@@ -25,7 +25,9 @@
                 <a href="/dashboard">Back to Dashboard</a>
                 <a href="/recommendation">Recommended</a>
                 <div class="user-menu">
-                    <a href="/dashboard" class="user-name">{{ current_user.username }}</a>
+                    <a href="#" class="user-avatar">
+                        <img src="{{ url_for('static', filename='uploads/' + user.avatar) }}" alt="Avatar" class="avatar-rounded">
+                    </a>
                     <div class="dropdown">
                         <a href="/profile">Profile</a>
                         <a href="/history">History</a>

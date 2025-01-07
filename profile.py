@@ -1,64 +1,94 @@
-from flask import Blueprint, render_template, flash, redirect, url_for
+from flask import Blueprint, request, render_template, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash
+import cloudinary
+import cloudinary.uploader
+from extensions import db
+import os
+from werkzeug.utils import secure_filename
+from flask import current_app
 from profileupdateform import ProfileUpdateForm
-from bson.objectid import ObjectId
-from app import mongo
+from utils import send_email
+
+
 
 profile_bp = Blueprint('profile', __name__, template_folder='templates')
 
 @profile_bp.route('/', methods=['GET', 'POST'])
 @login_required
 def profile():
-    
     form = ProfileUpdateForm()
-    
-    # Update the user's email and password
+
+    email_updated = False
+    password_updated = False
+
+    # Handle the update form
     if form.validate_on_submit():
-        update_data = {}
-        update_data['email'] = form.email.data
-        update_data['password'] = generate_password_hash(form.password.data)
+        if form.email.data and form.email.data != current_user.email:
+            current_user.email = form.email.data
+            email_updated = True
+        
+        if form.password.data:
+            current_user.password = generate_password_hash(form.password.data)
+            password_updated = True
+            
+        # Handle the avatar update
+        if form.avatar.data:
+            avatar_file = form.avatar.data
+            avatar_filename = secure_filename(avatar_file.filename)
+            avatar_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], avatar_filename))
+            current_user.avatar = avatar_filename
+
+        # Handle the bio update
+        if form.bio.data:
+            current_user.bio = form.bio.data
 
         try:
-            mongo.db.users.update_one(
-                {'_id': ObjectId(current_user.id)},
-                {'$set': {'email': form.email.data, 'password': generate_password_hash(form.password.data)}}    
-            )
+            db.session.commit()
+            
+            # Send notification emails
+            if email_updated:
+                send_email(
+                    to=current_user.email,
+                    subject="Email Updated",
+                    body=f"Hi {current_user.username},\n\nYour email address has been successfully updated.\n\nBest regards,\nFeelTunes Team"
+                )
+            if password_updated:
+                send_email(
+                    to=current_user.email,
+                    subject="Password Updated",
+                    body=f"Hi {current_user.username},\n\nYour password has been successfully updated. \n\nIf you did not make this change, please contact us immediately.\n\nBest regards,\nFeelTunes Team"
+                )
+                
             flash('Your profile has been updated.', 'success')
-            current_user.email = form.email.data
-            current_user.password = form.update_data['password']
+            
         except Exception as e:
             db.session.rollback()
-            flash(f'An error updating profile: {str(e)}', 'danger')
-    
+            flash(f'An error occurred: {str(e)}', 'danger')
+
         return redirect(url_for('profile.profile'))
-    
+
     return render_template('profile.html', user=current_user, form=form)
 
+
 @profile_bp.route('/profile/edit', methods=['GET', 'POST'])
+@login_required
 def edit_profile():
-    if request.method == 'POST':
-        update_data = {}
-        if 'username' in request.form and request.form['username']:
-            update_data['username'] = request.form['username']
-            current_user.username = request.form['username']
+    form = ProfileUpdateForm()
 
-        if 'email' in request.form and request.form['email']:
-            update_data['email'] = request.form['email']
-            current_user.email = request.form['email']
+    if form.validate_on_submit():
+        if form.avatar.data:
+            avatar_file = form.avatar.data
+            avatar_filename = secure_filename(avatar_file.filename)
+            avatar_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], avatar_filename))
+            current_user.avatar = avatar_filename
+        
+        if form.bio.data:
+            current_user.bio = form.bio.data
+        
+        db.session.commit()
 
-        if 'password' in request.form and request.form['password']:
-            hashed_password = generate_password_hash(request.form['password'])
-            update_data['password'] = hashed_password
-            current_user.password = hashed_password
-
-        if update_data:  # Update only if there's something to change
-            mongo.db.users.update_one({'_id': ObjectId(current_user.id)}, {'$set': update_data})
-            flash('Profile updated successfully!', 'success')
-        else:
-            flash('No changes were made.', 'info')
-
+        flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile.profile'))
 
-    user = mongo.db.users.find_one({"_id": ObjectId(current_user.id)})
-    return render_template('edit_profile.html', user=user)
+    return render_template('edit_profile.html', user=current_user, form=form)

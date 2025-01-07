@@ -1,0 +1,58 @@
+/* Ensure profile-info-container is a flex container */
+.profile-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+.profile-info-container {
+    display: contents;
+    align-items: center !important;
+    gap: 20px; 
+    margin-bottom: 40px;
+}
+
+/* Profile avatar styling */
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #181a18;
+    object-fit: cover;
+    align-items: center;
+}
+
+/* Ensure text is spaced */
+.user-details h4 {
+    margin: 5px 0;
+}
+
+/* Bio text input styles */
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+/* Upload avatar display styles */
+input[type="file"] {
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="file"]:hover {
+    background-color: #999999;
+}

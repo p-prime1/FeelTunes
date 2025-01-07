@@ -1,0 +1,113 @@
+/* General styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+header {
+    text-align: center;
+    background-color: #3f51b5;
+    color: white;
+    padding: 1.5rem 0;
+    position: sticky; /* Optional: makes the header stick to the top when scrolling */
+    top: 0;
+    z-index: 10; /* Ensures header stays on top of other elements */
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    padding-bottom: 0.5rem; /* Add some space below the title */
+}
+
+/* Time info styling */
+.recommendation-info {
+    text-align: center;
+    margin: 1.5rem 0 0.5rem; /* Reduced margin-top to bring closer to header */
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.playlist-container {
+    margin: 2rem auto;
+    max-width: 800px;
+    padding: 0 1rem;
+}
+
+.playlist-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 1rem;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Playlist item styles */
+.playlist-item {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.playlist-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.playlist-item a {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #3f51b5;
+    font-weight: bold;
+}
+
+.playlist-item a:hover {
+    color: #ff4081;
+}
+
+.playlist-item p {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0.2rem 0;
+}
+
+/* Hover effects */
+.playlist-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Footer styles */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem 0;
+    background-color: #3f51b5;
+    color: white;
+}
+
+footer a {
+    color: #ffeb3b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

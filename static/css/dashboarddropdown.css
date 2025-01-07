@@ -47,3 +47,19 @@ nav {
     background-color: #f4f4f4;
     color: #000;
 }
+
+/* Style for the avatar in the header */
+.user-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.avatar-rounded {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff; /* Optional border for better visibility */
+}

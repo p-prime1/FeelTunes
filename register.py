@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from werkzeug.security import generate_password_hash
-from bson.objectid import ObjectId
+from models import User, db
 from forms import RegisterForm
 from send_confirmation_email import generate_confirmation_token, confirm_token
 from flask import current_app
 from flask_mail import Mail, Message
-from app import mongo
 
 mail = Mail()
 register_bp = Blueprint('register', __name__)
@@ -19,31 +18,34 @@ def register():
         email = form.email.data
         password = form.password.data
         
+
         # # Check if the "accept_terms" checkbox is checked
         # accept_terms = request.form.get('accept_terms')
         # if not accept_terms:
         #     flash("You must agree to the Terms of Service to register.", "danger")
         #     return redirect(url_for('register.register'))
         
+
         
-        if mongo.db.users.find_one({"email": email}):
+        # Check if the username or email already exists
+        if User.query.filter_by(username=username).first():
+            flash("Username already exists", "danger")
+            db.session.rollback()
+            return render_template('register.html', form=form)
+        if User.query.filter_by(email=email).first():
             flash("Email already registered", "danger")
+            db.session.rollback()
             return render_template('register.html', form=form)
         
         # Hash the password and save user to the database
         hashed_password = generate_password_hash(password)
-        new_user = {
-            "username": username,
-            "email": email,
-            "password": hashed_password,
-            "is_confirmed": False
-        }
-        mongo.db.users.insert_one(new_user)
+        new_user = User(username=username, email=email, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
         
         # Send confirmation email
         send_confirmation_email(email, username)
         
-        print(confirm_token)
         
         flash("Registration successful! Please check your email to confirm your account.", "info")
         return redirect('/login/')
@@ -57,6 +59,7 @@ def send_confirmation_email(email, username):
         body = f"Hi {username},\n\nWelcome to FeelTunes! Please confirm your email by clicking the link below:\n{confirm_url}, \n\nBest regards,\nFeelTunes Team"
         
         msg = Message(subject, recipients=[email], body=body)
+        mail = current_app.extensions.get('mail')
         mail.send(msg)
         
         print(f"Confirmation email sent to {email}")
@@ -72,12 +75,11 @@ def confirm_email(token):
         flash("The confirmation link is invalid or has expired.", "danger")
         return redirect('/register/')
 
-    user = mongo.db.users.find_one({"email": email})
-    if user and user.get("is_confirmed"):
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.is_confirmed:
         flash("Account already confirmed. Please log in.", "success")
-    elif user:
-        mongo.db.users.update_one({"_id": user["_id"]}, {"$set": {"is_confirmed": True}})
-        flash("Your email has been confirmed. You can now log in.", "success")
     else:
-        flash("User not found", "danger")
+        user.is_confirmed = True
+        db.session.commit()
+        flash("Your email has been confirmed. You can now log in.", "success")
     return redirect('/login/')

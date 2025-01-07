@@ -11,13 +11,22 @@ body {
 /* Header Styles */
 header {
     background-color: #c9c9c9;
+    display: contents;
     padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 1225px;
+    width: 100%; /* Ensure the header takes the full width of the viewport */
+    position: relative; /* Ensures the header stretches across the entire screen */
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-sizing: border-box; /* Prevent any padding or margin from affecting width */
+    height: 60px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 40px; 
+    position: fixed;
+    margin-bottom: 40px;
+    top: 0;
 }
 
 .header-left {
@@ -35,6 +44,7 @@ header {
 nav {
     display: flex;
     gap: 15px;
+
 }
 
 nav a {
@@ -107,12 +117,15 @@ footer {
     padding: 10px;
     text-align: center;
     margin-top: auto; /* Ensure footer stays at the bottom */
+    position: fixed;
+    bottom: 0;
 }
 
 footer a {
     color: #fff;
     text-decoration: none;
     margin: 0 5px;
+
 }
 
 footer a:hover {

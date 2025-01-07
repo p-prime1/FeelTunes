@@ -1,20 +1,25 @@
-from bson.objectid import ObjectId
+from extensions import db
 from flask_login import UserMixin
-from werkzeug.security import check_password_hash
 
-class User(UserMixin):
-    def __init__(self, user_data):
-        self.id = str(user_data['_id'])
-        self.username = user_data['username']
-        self.email = user_data['email']
-        self.password = user_data['password']
-        self.bio = user_data.get('bio', '')
-        self.avatar = user_data.get('avatar', '')
 
-    def check_password(self, password):
-        return check_password_hash(self.password, password)
-        
-    @staticmethod
-    def get(user_id):
-        user_data = mongo.db.users.find_one({"_id": ObjectId(user_id)})
-        return User(user_data) if user_data else None
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False, unique=True)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String(200), nullable=False)
+    is_confirmed = db.Column(db.Boolean, default=False)
+    avatar = db.Column(db.String(256), nullable=True, default='default_avatar.png')
+    bio = db.Column(db.String(500), nullable=True, default="")
+    mood_state = db.Column(db.String(50), nullable=True)
+    
+    
+class History(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    mood = db.Column(db.String(50), nullable=False)
+    timestamp = db.Column(db.DateTime, default=db.func.now())
+    user = db.relationship('User', backref=db.backref('history', lazy=True))
+
+
+    def __repr__(self):
+        return f"<History {self.mood} for User ID {self.user_id}>"

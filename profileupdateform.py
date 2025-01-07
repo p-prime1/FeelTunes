@@ -1,17 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo, ValidationError
+from wtforms import StringField, PasswordField, SubmitField, FileField, TextAreaField
+from wtforms.validators import DataRequired, Email, Length, Regexp, EqualTo, ValidationError, Optional
 from models import User 
 
 class ProfileUpdateForm(FlaskForm):
     email = StringField(
         'New Email',
-        validators=[DataRequired(), Email()]
+        validators=[Optional(), Email()]
     )
     password = PasswordField(
         'New Password',
         validators=[
-            DataRequired(),
+            Optional(),
             Length(min=8),
             Regexp(
                 r'^(?=.*[A-Za-z])(?=.*\d).+$',
@@ -22,10 +22,12 @@ class ProfileUpdateForm(FlaskForm):
     confirm_password = PasswordField(
         'Confirm Password',
         validators=[
-            DataRequired(),
+            Optional(),
             EqualTo('password', message="Passwords must match.")
         ]
     )
+    avatar = FileField('Avatar', validators=[Optional()])
+    bio = TextAreaField('Bio', validators=[Optional()])
     submit = SubmitField('Update Profile')
 
     def validate_email(self, email):

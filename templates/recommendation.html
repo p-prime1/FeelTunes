@@ -1,17 +1,42 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <link rel="icon" href="{{ url_for('static', filename='graphic/headphones.png') }}" type="image/x-icon">
 
-{% block content %}
-<main class="about-page">
-    <section class="hero-section">
-        <h1>FeelTune</h1>
-        
-    </section>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recommendation.css') }}">
 
-    <section class="about-details">
-        <div class="feature">
-            <h2>WE DONT HAVE ALGORITHM YET</h2>
+</head>
+<body>
+    <header>
+        <h1>Recommended Playlist</h1>
+    </header>
 
-    </section>
+    <div class="recommendation-info">
+        <p><strong>Day:</strong> {{ day_of_week }}</p>
+        <p><strong>Time:</strong> {{ time }}</p>
+        <p><strong>Mood:</strong> {{ mood }}</p>
+    </div>
 
-</main>
-{% endblock %}
+    <div class="playlist-container">
+        <h2>Playlist:</h2>
+        <ul>
+            {% for song in playlist %}
+            <li>
+                <div class="playlist-item">
+                    <img src="{{ song.image }}" alt="{{ song.name }}">
+                    <a href="{{ song.url }}" target="_blank">{{ song.name }}</a>
+                    <p>{{ song.description }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <footer>
+        <a href="{{ url_for('dashboard.dashboard') }}">Back to Dashboard</a>
+    </footer>
+</body>
+</html>

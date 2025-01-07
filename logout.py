@@ -9,7 +9,5 @@ def logout():
     logout_user()
     session.clear()
     flash('You have been logged out.', 'success')
-    
-    print(f"Current session: {session}")
-    
+        
     return redirect(url_for('login.login'))
