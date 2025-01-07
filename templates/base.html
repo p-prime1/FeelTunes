@@ -17,14 +17,16 @@
     <!-- Header with navigation -->
     <header>
         <div class="header-left">
-            <a href="/"><img src="{{ url_for('static', filename='graphic/logo.png') }}" alt="FeelTune Logo" class="logo"></a>
+            <a href="/dashboard"><img src="{{ url_for('static', filename='graphic/logo.png') }}" alt="FeelTune Logo" class="logo"></a>
         </div>
         <nav>
             {% if current_user.is_authenticated %}
                 <a href="/dashboard">Back to Dashboard</a>
                 <a href="/recommendation">Recommended</a>
                 <div class="user-menu">
-                    <a href="/dashboard" class="user-name">{{ current_user.username }}</a>
+                    <a href="#" class="user-avatar">
+                        <img src="{{ url_for('static', filename='uploads/' + user.avatar) }}" alt="Avatar" class="avatar-rounded">
+                    </a>
                     <div class="dropdown">
                         <a href="/profile">Profile</a>
                         <a href="/history">History</a>
