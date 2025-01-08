@@ -29,12 +29,18 @@ FeelTune is an innovative web application that generates personalized playlists 
     Framework: Flask
 
     Dependencies:
-        Flask
-        Flask-SQLAlchemy
-        Flask-Login
-        Flask_WTF
-        Werkzeug Security
-        LoginManage
+            Flask
+            Flask-SQLAlchemy
+            flask_wtf
+            email-validator
+            Werkzeug
+            Flask-Login
+            Flask-Mail
+            itsdangerous
+            python-dotenv
+            flask_session
+            gunicorn
+            requests
 
     Database: SQLAlchemy for ORM
 
@@ -76,6 +82,35 @@ Contributions are welcome! If you'd like to contribute:
 # License 📜
 
 FeelTune is licensed under the MIT License. See LICENSE for details.
+
+# AUTHORS
+
+<details>
+    <summary>Innocent Karabo Mohlala</summary>
+    <ul>
+    <li><a href="https://www.github.com/termication">Github</a></li>
+    <li><a href="https://www.twitter.com/Termication_">Twitter</a></li>
+    <li><a href="mailto:terminalkarabo@gmail.com">e-mail</a></li>
+    </ul>
+</details>
+<details>
+    <summary>Nwaka Nduka Precious</summary>
+    <ul>
+    <li><a href="https://www.github.com/p-prime1">Github</a></li>
+    <li><a href="https://www.twitter.com/">Twitter</a></li>
+    <li><a href="mailto:preciousnwaka95@gmail.com">e-mail</a></li>
+    </ul>
+</details>
+<details>
+    <summary>Ogwu Jeffrey Ogechi</summary>
+    <ul>
+    <li><a href="https://www.github.com/Jeffrey7890
+">Github</a></li>
+    <li><a href="https://www.twitter.com/">Twitter</a></li>
+    <li><a href="mailto:jeffrey.ogechi@gmail.com">e-mail</a></li>
+    </ul>
+</details>
+
 # Acknowledgments 🙌
 
     Thanks to Spotify for their amazing APIs.
